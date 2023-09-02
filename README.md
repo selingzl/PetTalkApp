@@ -1,16 +1,9 @@
 # pet_talk
 
-A new Flutter project about recognitioning pet's face expressions.
+A Flutter project about recognition of a pet's facial expressions.
 
-## Getting Started
+## How it works?
 
-This project is a starting point for a Flutter application.
+Take a photo of your pet and we will tell you what is your pet's emotion. 
+So simple :3
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
