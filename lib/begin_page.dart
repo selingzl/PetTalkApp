@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'text_page.dart';
 
@@ -22,17 +23,31 @@ class AnaSayfa extends StatelessWidget {
       print('Error uploading file: $e');
     }
   }
+  Future<void> _openCamera(BuildContext context) async {
+    final status = await Permission.camera.request();
+    if (status.isGranted) {
+      // Kamera izni verildi, işlem yapabilirsiniz.
+    } else {
+      // Kamera izni reddedildi veya iptal edildi.
+    }
+  }
 
   Future<void> _getImage(BuildContext context) async {
     final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      // Seçilen resmi kullanmak istiyorsanız burada işlem yapabilirsiniz.
-      // Örneğin, Navigator ile başka bir sayfada gösterebilirsiniz.
-      uploadFile(pickedFile as String);
+    final status = await Permission.photos.request();
+    if (status.isGranted) {
+      final pickedFile = await picker.getImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        // Seçilen resmi kullanmak istiyorsanız burada işlem yapabilirsiniz.
+        // Örneğin, Navigator ile başka bir sayfada gösterebilirsiniz.
+        uploadFile(pickedFile as String);
+      }
+    } else {
+      // Galeri izni reddedildi veya iptal edildi.
     }
+
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +90,7 @@ class AnaSayfa extends StatelessWidget {
                           },
                           icon:  const Icon(
                               Icons.photo_camera_outlined),
-                          iconSize: 24,
+                          iconSize: 40,
                           color:  const Color(0xffC2AA9B),
 
                         ),
@@ -103,7 +118,7 @@ class AnaSayfa extends StatelessWidget {
 
                       textStyle: const TextStyle(fontFamily: 'OpenSans', fontSize: 16),
                     ),
-                    child: const Text('Fotoğrafı Yükle'),
+                    child: const Text('Upload image'),
                   ),
                 ),
 
