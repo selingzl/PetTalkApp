@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "859010274798",
+    "project_id": "pettalk-88963",
+    "storage_bucket": "pettalk-88963.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:859010274798:android:69480c1dc4eacc8c096aff",
+        "android_client_info": {
+          "package_name": "com.example.pet_talk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCY_VbJkrQzowIuA6luJM4STvp44NB5oDk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
