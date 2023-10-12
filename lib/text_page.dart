@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'begin_page.dart';
 
-class DigerSayfa extends StatelessWidget {
-  const DigerSayfa({super.key});
+class TextPage extends StatelessWidget {
+
+  final dynamic Line;
+  final dynamic emoji;
+
+  const TextPage(this.Line, this.emoji, {super.key});
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Stack(
         children: [
@@ -39,10 +45,13 @@ class DigerSayfa extends StatelessWidget {
                     width: 252,
                     height: 375,
                     margin: const EdgeInsets.only(bottom: 30),
+                    padding: EdgeInsets.all(30),
                     decoration: BoxDecoration(
                       color: const Color(0xffE9CD96).withOpacity(0.5),
                       borderRadius: BorderRadius.circular(40.0),
                     ),
+
+                    child: Text("$Line", style: TextStyle(fontSize: 20), textAlign: TextAlign.center, ),
 
                   ),
                 ),
@@ -51,7 +60,7 @@ class DigerSayfa extends StatelessWidget {
                     width: 100,
                     height: 100,
                     color: const Color(0xffE9CD96),
-
+                    child: Image.asset(emoji, fit: BoxFit.fill,),
                   ),
 
                 ),
