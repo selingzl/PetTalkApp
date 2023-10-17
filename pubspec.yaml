@@ -67,11 +67,13 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
   - assets/labels.txt
-  - assets/model_unquant.tflite
+  #- assets/model_unquant.tflite
   - images/
-  - assets/sad.jpg
   - assets/happy.png
   - assets/angry.png
+  - assets/sad.png
+  - assets/expressionless.png
+  - assets/my_model.tflite
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

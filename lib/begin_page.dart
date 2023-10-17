@@ -9,7 +9,6 @@ import 'package:tflite/tflite.dart';
 import 'text_page.dart';
 
 
-
 class AnaSayfa extends StatefulWidget {
   const AnaSayfa({super.key});
 
@@ -26,6 +25,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
   late String line = '';
   late String emoji = '';
 
+  final picker = ImagePicker();
+
   @override
   void initState()
   {
@@ -37,7 +38,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
   async {
     Tflite.close();
     String res;
-    res=(await Tflite.loadModel(model: "assets/model_unquant.tflite",labels: "assets/labels.txt"))!;
+    res=(await Tflite.loadModel(model: "assets/my_model.tflite",labels: "assets/labels.txt"))!;
     print("Models loading status: $res");
   }
 
@@ -57,16 +58,35 @@ class _AnaSayfaState extends State<AnaSayfa> {
     });
   }
 
-  Future pickImage()
-  async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? pickedFile = await _picker.pickImage(
-      source: ImageSource.gallery,
+  //Options(Camera or Gallery)
+  Future<void> _showImageOptions() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Choose an option"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _openCamera();
+                },
+                child: Text("Camera"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  pickImage();
+                },
+                child: Text("Gallery"),
+              ),
+            ],
+          ),
+        );
+      },
     );
-    File image=File(pickedFile!.path);
-    imageClassification(image);
-    imagepath = image.path;
-    print("RESULTS: $_results");
   }
 
 // For storage the photo
@@ -82,39 +102,49 @@ class _AnaSayfaState extends State<AnaSayfa> {
     }
   }
 
-  Future<void> _openCamera(BuildContext context) async {
-    final status = await Permission.camera.request();
-    if (status.isGranted) {
-      // Kamera izni verildi, işlem yapabilirsiniz.
-    } else {
-      // Kamera izni reddedildi veya iptal edildi.
-    }
+  Future pickImage()
+  async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? pickedFile = await _picker.pickImage(
+        source: ImageSource.gallery
+    );
+    File image=File(pickedFile!.path);
+    imageClassification(image);
+    imagepath = image.path;
+    print("RESULTS: $_results");
+  }
+
+  Future<void> _openCamera() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? pickedFile = await _picker.pickImage(
+        source: ImageSource.camera
+    );
+    File image=File(pickedFile!.path);
+    imageClassification(image);
+    imagepath = image.path;
+    print("RESULTS: $_results");
   }
 
   Future<void> chooseLine() async {
     if (imageSelect) {
-      List<String> lines = [];
-
       _results.forEach((result) {
         String? label = result['label'];
-        print("label $label");
-        if (label == '0 Happy') {
+        if ( label == 'Happy') {
           emoji = "assets/happy.png";
           line = "I'm so happy right now!";
-        } else if (label == '2 Sad') {
-          emoji = "assets/sad.jpg";
+        } else if (label == 'Sad') {
+          emoji = "assets/sad.png";
           line = "I'm so sad right now";
-        } else if (label == '1 Angry') {
+        } else if (label == 'Angry') {
           emoji = "assets/angry.png";
           line = "I'm so angry right now";
         } else {
           line = "I don't know how I feel";
+          emoji = "assets/expressionless.png";
         }
-        lines.add(line);
       });
-
       // Now you have a list of lines, one for each result
-      print("lines: $lines");
+      print("lines: $line");
     }
   }
 
@@ -162,7 +192,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                       child: Center(
                         child: IconButton(
                           onPressed: () {
-                            pickImage(); // Galeriyi aç
+                            _showImageOptions(); // Galeriyi aç
                           },
                           icon:  const Icon(
                               Icons.photo_camera_outlined),
